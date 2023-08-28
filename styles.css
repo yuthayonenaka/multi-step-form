@@ -432,7 +432,6 @@ section {
 }
 
 .container__detail .flex-row:nth-child(2) {
-  margin-bottom: 1rem;
   margin-top: 2rem;
 }
 
@@ -572,3 +571,4 @@ section {
     padding: 3.6rem 3.6rem;
   }
 }
+
