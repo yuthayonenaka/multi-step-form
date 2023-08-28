@@ -22,12 +22,16 @@ const planToggle = document.querySelector(".toggle");
 // Summary Container
 
 const summaryContainer = document.querySelector(".container__detail");
+const addOnsSummaryEl = document.querySelectorAll(
+  ".container__detail .flex-row:not(:nth-child(1))"
+);
 const totalEl = document.querySelector(".total");
 const total = document.querySelector(".price--large");
+const changeEl = document.querySelector("#change");
 
-summaryContainer.innerHTML = "";
-totalEl.outerHTML = "";
-total.outerHTML = "";
+addOnsSummaryEl.forEach((addon) => (addon.outerHTML = ""));
+totalEl.textContent = "";
+total.textContent = "";
 
 // Price
 const planMonthlyPrice = [9, 12, 15];
@@ -161,32 +165,16 @@ planToggle.addEventListener("change", (e) => {
 });
 
 // Add plan element into step summary / step 4
-function addPlanSummary(plan, price) {
-  const html =
-    time === "monthly"
-      ? ` 
-  <div class="flex-row" id="${plan}">
-    <div class="flex-col">
-      <p class="heading--tertiary">${plan} (${
-          time === "monthly" ? "Monthly" : "Yearly"
-        })</p>
-      <a href="#" class="sub-heading">Change</a>
-    </div>
-    <p class="price--medium">$${price}/mo</p>
-  </div>
-`
-      : ` 
-<div class="flex-row" id="${plan}">
-  <div class="flex-col">
-    <p class="heading--tertiary">${plan} (${
-          time === "monthly" ? "Monthly" : "Yearly"
-        })</p>
-    <a href="#" class="sub-heading">Change</a>
-  </div>
-  <p class="price--medium">$${price}/yr</p>
-</div>
-`;
-  summaryContainer.insertAdjacentHTML("afterbegin", html);
+function addPlanSummary() {
+  document.querySelector(
+    ".container__detail .heading--tertiary"
+  ).textContent = `${currentPlan} (${
+    time === "monthly" ? "Monthly" : "Yearly"
+  })`;
+
+  document.querySelector(".price--medium").textContent = `$${
+    price.plan_price
+  }/${time === "monthly" ? "mo" : "yr"}`;
 }
 
 // Choosing the plan
@@ -272,6 +260,7 @@ function displayUpdate() {
 
 //  Update the display on step summry / step 4
 function updateSummary() {
+  addPlanSummary();
   if (time === "monthly") {
     total.textContent = `$${price.total()}/mo`;
     totalEl.textContent = `Total(per month)`;
@@ -280,14 +269,12 @@ function updateSummary() {
     totalEl.textContent = `Total(per year)`;
     total.textContent = `$${price.total()}/yr`;
   }
-  if (currentStep === 3) addPlanSummary(currentPlan, price.plan_price);
 }
 
 // Next Step Button
 nextButton.forEach((btn, i) => {
   btn.addEventListener("click", () => {
     validateForm();
-    console.log(currentStep);
 
     if (validateForm() && currentStep <= 4) {
       displayUpdate();
@@ -297,7 +284,6 @@ nextButton.forEach((btn, i) => {
 
     addOnsDisplayUpdate();
     updateSummary();
-    console.log(price);
   });
 });
 
@@ -321,11 +307,6 @@ function resetAddOnsValue() {
     .forEach((card) => card.classList.remove("checked"));
   if (document.querySelectorAll(".add-ons"))
     document.querySelectorAll(".add-ons").forEach((addon) => addon.remove());
-
-  console.log(price);
-}
-function removePlan() {
-  document.querySelector(`#${currentPlan}`).remove();
 }
 
 function resetPlan() {
@@ -340,19 +321,25 @@ function resetPlan() {
 
 prevButton.forEach((btn, i) => {
   btn.addEventListener("click", () => {
-    console.log(currentStep);
-
     if (currentStep <= 2) {
       resetInput();
       resetPlan();
     }
-    console.log(time);
-    console.log(planToggle.value);
-    if (currentStep === 3) removePlan();
+
     if (currentStep === 3) resetAddOnsValue();
     displayUpdate();
     currentStep--;
     displayUpdate();
-    console.log(price);
   });
 });
+
+changeEl.addEventListener("click", (e) => {
+  e.preventDefault();
+  resetPlan();
+  displayUpdate();
+  currentStep = 2;
+  displayUpdate();
+  resetAddOnsValue();
+});
+
+
