@@ -19,7 +19,7 @@ This is a solution to the [Multi-step form challenge on Frontend Mentor](https:/
 
 ### Links
 
-- Solution URL: [https://effulgent-starship-48abd2.netlify.app]](https://effulgent-starship-48abd2.netlify.app)
+- Solution URL: [https://effulgent-starship-48abd2.netlify.app](https://effulgent-starship-48abd2.netlify.app)
 - Live Site URL: [https://github.com/yuthayonenaka/multi-step-form/tree/main](https://github.com/yuthayonenaka/multi-step-form/tree/main)
 
 ## My process
