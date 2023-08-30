@@ -367,15 +367,15 @@ section {
   background-color: var(--clr-light-5);
   width: 35%;
 
-  top: 15%;
-  left: 5%;
+  top: 0.4rem;
+  left: 0.2rem;
   border-radius: 100%;
   aspect-ratio: 1/1;
   z-index: 1;
 }
 
 .toggle:checked + [for="check"]::before {
-  transform: translateX(18px);
+  transform: translateX(2rem);
 }
 
 .toggle-active {
@@ -574,5 +574,14 @@ section {
   .section__step-1 .container,
   .section__main-container {
     padding: 3.6rem 3.6rem;
+  }
+
+  .container__toggle [for="check"]::before {
+    top: 0.3rem;
+    left: 0.2rem;
+  }
+
+  .toggle:checked + [for="check"]::before {
+    transform: translateX(1.9rem);
   }
 }
