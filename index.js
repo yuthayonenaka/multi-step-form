@@ -149,6 +149,28 @@ function planUiUpdate() {
   });
 }
 
+function setValueOfPlan() {
+  cardEl.forEach((card, i) => {
+    if (!card.classList.contains("chose")) return;
+
+    if (time === "yearly") price.plan_price = planYearlyPrice[i];
+
+    if (time === "monthly") price.plan_price = planMonthlyPrice[i];
+  });
+}
+
+function setValueOfAddOns(targetElement, index) {
+  if (time === "monthly") {
+    price[targetElement.name] = addOnMonthlyPrice[index];
+    addOnsSummary(targetElement.name, addOnMonthlyPrice[index]);
+  }
+
+  if (time === "yearly") {
+    price[targetElement.name] = addOnYearlyPrice[index];
+    addOnsSummary(targetElement.name, addOnYearlyPrice[index]);
+  }
+}
+
 planToggle.addEventListener("change", (e) => {
   if (e.target.value === "monthly") {
     e.target.value = "yearly";
@@ -159,8 +181,14 @@ planToggle.addEventListener("change", (e) => {
     time = e.target.value;
     planUiSwitcher();
   }
-  planDefault();
-
+  document.querySelectorAll(`.add-ons`).forEach((el) => el.remove());
+  addOnCheckBoxes.forEach((checkBox, i) => {
+    if (checkBox.value === "check") {
+      setValueOfAddOns(checkBox, i);
+    }
+  });
+  setValueOfPlan();
+  console.log(price);
   planUiUpdate();
 });
 
@@ -185,14 +213,8 @@ cardEl.forEach((card, i) => {
     cardEl.forEach((card) => card.classList.remove("chose"));
     card.classList.add("chose");
 
-    if (time === "monthly") {
-      price.plan_price = planMonthlyPrice[i];
-      currentPlan = plan[i];
-    }
-    if (time === "yearly") {
-      price.plan_price = planYearlyPrice[i];
-      currentPlan = plan[i];
-    }
+    setValueOfPlan();
+    currentPlan = plan[i];
   });
 });
 
@@ -228,21 +250,14 @@ function addOnsSummary(addOnName, price) {
 }
 
 // Choosing add on
-addOnCheckBoxes.forEach((checkbox, i) => {
-  checkbox.addEventListener("change", (e) => {
+addOnCheckBoxes.forEach((checkBox, i) => {
+  checkBox.addEventListener("change", (e) => {
     e.target.value = e.target.value === "uncheck" ? "check" : "uncheck";
     document.querySelector(`.add-ons-card-${i}`).classList.toggle("checked");
     if (e.target.value === "check") {
-      if (time === "monthly") {
-        price[e.target.name] = addOnMonthlyPrice[i];
-        addOnsSummary(e.target.name, addOnMonthlyPrice[i]);
-      }
-
-      if (time === "yearly") {
-        price[e.target.name] = addOnYearlyPrice[i];
-        addOnsSummary(e.target.name, addOnYearlyPrice[i]);
-      }
-    } else {
+      setValueOfAddOns(e.target, i);
+    }
+    if (e.target.value === "uncheck") {
       price[e.target.name] = 0;
       document.querySelector(`#${e.target.name}`).remove();
     }
@@ -284,6 +299,7 @@ nextButton.forEach((btn, i) => {
 
     addOnsDisplayUpdate();
     updateSummary();
+    console.log("next", price);
   });
 });
 
@@ -324,22 +340,24 @@ prevButton.forEach((btn, i) => {
     if (currentStep <= 2) {
       resetInput();
       resetPlan();
+      resetAddOnsValue();
     }
 
-    if (currentStep === 3) resetAddOnsValue();
+    // if (currentStep === 3) resetAddOnsValue();
     displayUpdate();
     currentStep--;
     displayUpdate();
+    console.log("prev", price);
   });
 });
 
 changeEl.addEventListener("click", (e) => {
   e.preventDefault();
-  resetPlan();
+  // resetPlan();
   displayUpdate();
   currentStep = 2;
   displayUpdate();
-  resetAddOnsValue();
+  // resetAddOnsValue();
+  console.log("changeEL", price);
 });
-
 
