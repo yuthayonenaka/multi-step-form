@@ -188,7 +188,7 @@ planToggle.addEventListener("change", (e) => {
     }
   });
   setValueOfPlan();
-  console.log(price);
+
   planUiUpdate();
 });
 
@@ -299,7 +299,6 @@ nextButton.forEach((btn, i) => {
 
     addOnsDisplayUpdate();
     updateSummary();
-    console.log("next", price);
   });
 });
 
@@ -343,21 +342,16 @@ prevButton.forEach((btn, i) => {
       resetAddOnsValue();
     }
 
-    // if (currentStep === 3) resetAddOnsValue();
     displayUpdate();
     currentStep--;
     displayUpdate();
-    console.log("prev", price);
   });
 });
 
 changeEl.addEventListener("click", (e) => {
   e.preventDefault();
-  // resetPlan();
+
   displayUpdate();
   currentStep = 2;
   displayUpdate();
-  // resetAddOnsValue();
-  console.log("changeEL", price);
 });
-
